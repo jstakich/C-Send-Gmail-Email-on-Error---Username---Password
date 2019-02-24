@@ -1,0 +1,31 @@
+  /// <summary>
+        /// Send email on error and Log it within c#
+        /// </summary>
+        /// <param name="ErrorMsg"></param>
+        private void Send_Email_On_Error(string ErrorMsg)
+        {
+            try
+            {
+                SmtpClient client = new SmtpClient();
+                MailAddress from = new MailAddress("theemailaccount@domain.gov");
+                client.Credentials = new System.Net.NetworkCredential("theemailaccount@domain.gov", "Password");
+                MailAddress to = new MailAddress(email_errors_to);
+                MailMessage message = new MailMessage(from, to);
+                DateTime now = DateTime.Now;
+
+                message.Body = "Put what you want in your body... " + ErrorMsg.ToString();
+                message.Subject = "Put what you want in your subject... " + now.ToString();
+                client.Host = "smtp.gmail.com";
+                client.Port = 587;
+                client.EnableSsl = true;
+                client.Send(message);
+                System.Environment.Exit(1);
+
+
+            }
+            catch (Exception ex)
+            {
+                log_it(ex.ToString());
+                System.Environment.Exit(1);
+            }
+        }
